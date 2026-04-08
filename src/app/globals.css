@@ -1,0 +1,150 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-background: #FAFAF9;
+  --color-foreground: #1d1d1f;
+  --color-secondary: #86868b;
+  --color-accent: #6BC0AD;
+  --color-accent-dark: #4FA98E;
+  --color-card: #ffffff;
+  --color-border: #e8e8ed;
+  --color-hero-start: #0c1222;
+  --color-hero-end: #1a2744;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ---- Hero ---- */
+.hero-bg {
+  background: linear-gradient(165deg, #0c1222 0%, #162033 40%, #1a2744 70%, #0f1a30 100%);
+  position: relative;
+  overflow: hidden;
+}
+.hero-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(107, 192, 173, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* ---- Browser Mockup ---- */
+.browser-mockup {
+  background: #fff;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.04),
+    0 8px 40px rgba(0, 0, 0, 0.08),
+    0 24px 80px rgba(0, 0, 0, 0.06);
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+              box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.browser-mockup:hover {
+  transform: translateY(-4px);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.04),
+    0 16px 56px rgba(0, 0, 0, 0.12),
+    0 32px 100px rgba(0, 0, 0, 0.08);
+}
+.browser-topbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 20px;
+  background: #f5f5f7;
+  border-bottom: 1px solid #e8e8ed;
+}
+.browser-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.browser-url-bar {
+  flex: 1;
+  margin-left: 16px;
+  padding: 7px 16px;
+  background: #fff;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #86868b;
+  font-family: var(--font-mono), ui-monospace, monospace;
+  border: 1px solid #e8e8ed;
+  letter-spacing: -0.01em;
+}
+.browser-mockup img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---- Scroll Reveal ---- */
+.reveal {
+  opacity: 0;
+  transform: translateY(48px);
+  transition: opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+              transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+.reveal-d1 { transition-delay: 0.12s; }
+.reveal-d2 { transition-delay: 0.24s; }
+.reveal-d3 { transition-delay: 0.36s; }
+
+/* ---- Pill Tags ---- */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 100px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  background: #f5f5f7;
+  color: #1d1d1f;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+.pill:hover {
+  border-color: #e8e8ed;
+  background: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+/* ---- Scroll indicator ---- */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(10px); }
+}
+.float-anim {
+  animation: float 2.5s ease-in-out infinite;
+}
+
+/* ---- Metric Numbers ---- */
+.metric-num {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+/* ---- Section Divider ---- */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, #e8e8ed 20%, #e8e8ed 80%, transparent 100%);
+}
