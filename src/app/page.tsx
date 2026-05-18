@@ -181,59 +181,23 @@ const personal: Project[] = [
    PERSONALIZATION — URL param ?to=
    ================================================================ */
 
-type Recipient = {
-  name: string;
-  source: string; // where the name was extracted from
-  wink: string;   // playful line for the P.S.
-} | null;
+type Recipient = { name: string } | null;
 
-const RECIPIENTS: Record<string, Recipient> = {
-  gerard: {
-    name: "Gerard",
-    source: "spicy4tuna.com",
-    wink:
-      "P.S.: esta página la monté en tres horas con Claude. El “Para Gerard” de arriba lo detecta la propia URL.",
-  },
-  euge: {
-    name: "Euge",
-    source: "spicy4tuna.com",
-    wink:
-      "P.S.: esta página la monté en tres horas con Claude. Tu nombre lo detecta la URL automáticamente.",
-  },
-  alvaro: {
-    name: "Álvaro",
-    source: "spicy4tuna.com",
-    wink:
-      "P.S.: esta página la monté en tres horas con Claude. Tu nombre lo detecta la URL automáticamente.",
-  },
-  marc: {
-    name: "Marc",
-    source: "spicy4tuna.com",
-    wink:
-      "P.S.: esta página la monté en tres horas con Claude. Tu nombre lo detecta la URL automáticamente.",
-  },
-  willy: {
-    name: "Willy",
-    source: "spicy4tuna.com",
-    wink:
-      "P.S.: esta página la monté en tres horas con Claude. Tu nombre lo detecta la URL automáticamente.",
-  },
+const RECIPIENT_ALIASES: Record<string, string> = {
+  gerard: "Gerard",
+  euge: "Euge",
+  alvaro: "Álvaro",
+  marc: "Marc",
+  willy: "Willy",
 };
 
 function resolveRecipient(raw?: string | string[]): Recipient {
   if (!raw) return null;
   const key = (Array.isArray(raw) ? raw[0] : raw).toLowerCase().trim();
-  if (key in RECIPIENTS) return RECIPIENTS[key];
-  // Generic fallback — accept any first name passed via URL
+  if (key in RECIPIENT_ALIASES) return { name: RECIPIENT_ALIASES[key] };
   const safe = key.replace(/[^a-záéíóúñ]/gi, "").slice(0, 24);
   if (!safe) return null;
-  const display = safe.charAt(0).toUpperCase() + safe.slice(1);
-  return {
-    name: display,
-    source: "tu propia página",
-    wink:
-      "P.S.: ese nombre arriba lo cogí del parámetro de la URL. Si te ha llegado este link, ya sabes quién lo personalizó.",
-  };
+  return { name: safe.charAt(0).toUpperCase() + safe.slice(1) };
 }
 
 /* ================================================================
@@ -291,35 +255,9 @@ export default async function Home({
         ]}
       />
       <StackSection />
-      <Contact recipient={recipient} />
+      <Contact />
       <Footer />
     </main>
-  );
-}
-
-/* ================================================================
-   PERSONAL NOTE — appears between hero and timeline when recipient set
-   ================================================================ */
-
-function PersonalNote({ recipient }: { recipient: NonNullable<Recipient> }) {
-  return (
-    <section className="px-6 py-12 sm:py-16 bg-[var(--color-paper)] border-b border-[var(--color-border)]">
-      <div className="mx-auto max-w-5xl">
-        <div className="flex items-start gap-4">
-          <div className="shrink-0 mt-1">
-            <Sigil size={36} variant="ink" />
-          </div>
-          <div>
-            <div className="text-[10.5px] font-mono uppercase tracking-[0.18em] text-[var(--color-gray-500)] mb-2">
-              Para {recipient.name}
-            </div>
-            <p className="text-[clamp(1.1rem,1.65vw,1.4rem)] leading-[1.45] text-[var(--color-ink)]">
-              Catorce productos en producción en <span className="font-display">tres meses</span>. Esta página, en <span className="font-display">tres horas</span>.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -402,90 +340,6 @@ function Hero({ recipient }: { recipient: Recipient }) {
 /* ================================================================
    MANIFESTO — pull quote moment
    ================================================================ */
-
-/* ================================================================
-   TIMELINE — narrative arc Marzo → Hoy
-   ================================================================ */
-
-function Timeline() {
-  const milestones = [
-    {
-      when: "Marzo 2026",
-      what: "Primera línea",
-      detail:
-        "Cero código en GitHub. Industrial engineer trabajando con Excel y procesos manuales en una fintech europea.",
-      tone: "navy" as const,
-    },
-    {
-      when: "Abril 2026",
-      what: "El equipo entra",
-      detail:
-        "Primera versión del dashboard interno desplegado. La empresa empieza a abrirlo cada mañana.",
-      tone: "amber" as const,
-    },
-    {
-      when: "Mayo 2026",
-      what: "Sale solo",
-      detail:
-        "Catorce productos en producción. Pipeline contable automático. Agentes que postean asientos por la noche.",
-      tone: "teal" as const,
-    },
-    {
-      when: "Hoy",
-      what: "Disponible",
-      detail:
-        "Abierto a conversaciones sobre construir algo parecido para otra empresa.",
-      tone: "coral" as const,
-    },
-  ];
-
-  return (
-    <section className="px-6 py-24 sm:py-32 border-b border-[var(--color-border)]" aria-label="Historia">
-      <div className="mx-auto max-w-6xl">
-        <Reveal>
-          <div className="flex items-center gap-3 mb-10">
-            <span className="section-num">00</span>
-            <span className="eyebrow">Historia corta</span>
-            <span className="flex-1 h-px bg-[var(--color-border)]" />
-          </div>
-          <h2 className="max-w-4xl text-[clamp(1.85rem,3.8vw,2.85rem)] font-bold leading-[1.1] tracking-[-0.03em] text-[var(--color-ink)] mb-14 sm:mb-20">
-            De <span className="font-display">cero líneas</span> a catorce productos en producción, en setenta y cinco días.
-          </h2>
-        </Reveal>
-
-        <Reveal delay={1}>
-          <ol className="relative grid grid-cols-1 md:grid-cols-4 gap-y-12 md:gap-y-0 md:gap-x-6">
-            <div className="hidden md:block absolute top-[18px] left-0 right-0 h-px bg-[var(--color-border)]" />
-            {milestones.map((m, i) => {
-              const color =
-                m.tone === "teal" ? "var(--color-teal-deep)"
-                : m.tone === "amber" ? "#B68B22"
-                : m.tone === "coral" ? "#B84830"
-                : "var(--color-navy)";
-              return (
-                <li key={m.when} className="relative pt-10">
-                  <span
-                    className="absolute top-3 left-0 w-3 h-3 rounded-full ring-4"
-                    style={{ background: color, boxShadow: `0 0 0 4px var(--color-paper)`, ["--tw-ring-color" as string]: "var(--color-paper)" }}
-                  />
-                  <div className="text-[10.5px] font-mono uppercase tracking-[0.14em] text-[var(--color-gray-500)]">
-                    {String(i + 1).padStart(2, "0")} · {m.when}
-                  </div>
-                  <div className="mt-2 text-[20px] font-semibold leading-tight tracking-[-0.02em] text-[var(--color-ink)]">
-                    {m.what}
-                  </div>
-                  <p className="mt-3 text-[14px] leading-[1.6] text-[var(--color-gray-600)] max-w-xs">
-                    {m.detail}
-                  </p>
-                </li>
-              );
-            })}
-          </ol>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
 
 function Manifesto() {
   return (
@@ -779,7 +633,7 @@ function StackSection() {
    CONTACT — minimal, no pitch
    ================================================================ */
 
-function Contact({ recipient }: { recipient: Recipient }) {
+function Contact() {
   return (
     <section id="contact" className="px-6 py-28 sm:py-36 border-t border-[var(--color-border)] bg-[var(--color-paper)]">
       <div className="mx-auto max-w-5xl">
@@ -790,38 +644,11 @@ function Contact({ recipient }: { recipient: Recipient }) {
             <span className="flex-1 h-px bg-[var(--color-border)]" />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
-            <div className="lg:col-span-7">
-              <p className="text-[clamp(1.65rem,3.5vw,2.6rem)] leading-[1.2] tracking-[-0.025em] text-[var(--color-ink)]">
-                Si tienes un Excel que abres <span className="font-display">cada semana</span>, probablemente se puede automatizar.
-              </p>
-            </div>
-            <div className="lg:col-span-5">
-              <div className="space-y-4">
-                <ContactRow label="Email" value="javiergonzalez030897@gmail.com" href="mailto:javiergonzalez030897@gmail.com" />
-                <ContactRow label="GitHub" value="javiergonzalez-ctrl" href="https://github.com/javiergonzalez-ctrl" />
-              </div>
-            </div>
+          <div className="max-w-2xl space-y-4">
+            <ContactRow label="Email" value="javiergonzalez030897@gmail.com" href="mailto:javiergonzalez030897@gmail.com" />
+            <ContactRow label="GitHub" value="javiergonzalez-ctrl" href="https://github.com/javiergonzalez-ctrl" />
           </div>
 
-          {recipient && (
-            <div className="mt-16 pt-10 border-t border-[var(--color-border)] grid grid-cols-1 lg:grid-cols-12 gap-6">
-              <div className="lg:col-span-7 flex items-start gap-4">
-                <span className="font-display italic text-[28px] text-[var(--color-teal-deep)] leading-none mt-1">P.S.</span>
-                <p className="text-[15px] leading-[1.65] text-[var(--color-gray-600)]">
-                  {recipient.wink}
-                </p>
-              </div>
-              <div className="lg:col-span-5 lg:text-right">
-                <div className="text-[10.5px] font-mono uppercase tracking-[0.16em] text-[var(--color-gray-500)] mb-2">
-                  Fuente del nombre
-                </div>
-                <div className="text-[13.5px] font-mono text-[var(--color-ink)]">
-                  {recipient.source}
-                </div>
-              </div>
-            </div>
-          )}
         </Reveal>
       </div>
     </section>
