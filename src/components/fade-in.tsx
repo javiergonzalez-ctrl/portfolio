@@ -6,10 +6,12 @@ export function Reveal({
   children,
   className = "",
   delay = 0,
+  as: Tag = "div",
 }: {
   children: React.ReactNode;
   className?: string;
-  delay?: number;
+  delay?: 0 | 1 | 2 | 3 | 4;
+  as?: keyof React.JSX.IntrinsicElements;
 }) {
   const ref = useRef<HTMLDivElement>(null);
 
@@ -23,16 +25,17 @@ export function Reveal({
           observer.unobserve(el);
         }
       },
-      { threshold: 0.1, rootMargin: "0px 0px -60px 0px" },
+      { threshold: 0.12, rootMargin: "0px 0px -40px 0px" },
     );
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
 
   const dc = delay > 0 ? ` reveal-d${delay}` : "";
+  const Component = Tag as React.ElementType;
   return (
-    <div ref={ref} className={`reveal${dc} ${className}`}>
+    <Component ref={ref} className={`reveal${dc} ${className}`}>
       {children}
-    </div>
+    </Component>
   );
 }
