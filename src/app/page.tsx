@@ -10,7 +10,7 @@ import { CountUp } from "@/components/count-up";
 import { MagneticButton } from "@/components/magnetic-button";
 import { HeroName } from "@/components/hero-name";
 import { StackGrid } from "@/components/stack-grid";
-import { Sigil } from "@/components/sigil";
+
 import { LastPush } from "@/components/last-push";
 
 /* ================================================================
@@ -273,7 +273,6 @@ function Hero({ recipient }: { recipient: Recipient }) {
       {/* Top meta line */}
       <div className="relative z-10 pt-8 sm:pt-10 flex items-center justify-between text-[11px] font-mono uppercase tracking-[0.22em] text-white/45">
         <div className="flex items-center gap-3">
-          <Sigil size={28} variant="paper" />
           <span>Madrid · España</span>
         </div>
         <span className="hidden sm:inline">
